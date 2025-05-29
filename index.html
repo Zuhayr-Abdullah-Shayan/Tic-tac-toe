@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./download.png" type="image/x-icon">
+    <style>
+    body{
+        font-family: 'Courier New', Courier, monospace;
+        background-color: cadetblue;
+        text-align: center;
+    }
+    h1{
+        color: aliceblue;
+    }
+    #board{
+        margin: 50px auto;
+        width: 320px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    .cell{
+        height: 100px;
+        width: 100px;
+        background-color: aliceblue;
+        cursor: pointer;
+        font-size: 36px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    button{
+        padding: 10px 20px;
+        background-color: aliceblue;
+        cursor: pointer;
+        border: none;
+    }
+    </style>
+</head>
+<body>
+    <h1>Let's play Tic Tac Toe!</h1>
+    <div id="board">
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+    </div>
+    <button onclick="resetGame()" id="reset">Reset</button>
+    <p id="result"></p>
+    <script>
+    let cells=document.querySelectorAll('.cell')
+    let reset=document.getElementById('reset')
+    let result=document.getElementById('result')
+    let currentPlayer='❌'
+    let gameActive=true
+    let winningPattern=[
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6],
+    ]
+    function checkWinner(playerChoice){
+        for(let item of winningPattern){
+            if(
+                cells[item[0]].innerHTML===playerChoice &&
+                cells[item[1]].innerHTML===playerChoice &&
+                cells[item[2]].innerHTML===playerChoice
+            ){
+               return true 
+            }
+        }
+        return false
+    }
+    function draw(){
+        for(let item of cells){
+            if(item.innerHTML===''){
+                return false
+            }
+        }
+        return true
+    }
+    cells.forEach((item)=>{
+        item.addEventListener('click',handleClick)
+    })
+    function handleClick(event){
+        console.log(event.target)
+        if(event.target.innerHTML === '' && gameActive){
+            event.target.innerHTML = currentPlayer
+            if(checkWinner(currentPlayer)){
+                result.innerHTML=`✨${currentPlayer} won!✨`
+                gameActive=false
+            }
+            else if(draw()){
+                result.innerHTML='Its a draw!'
+                gameActive=false
+            }
+            else{
+                currentPlayer=currentPlayer==='❌'?'⭕':'❌'
+            }
+        }
+    }
+    function resetGame(){
+        for(let item of cells){
+            item.innerHTML=''
+        }
+        currentPlayer='❌'
+        gameActive=true
+        result.innerHTML=''
+    }
+    </script>
+</body>
+</html>
